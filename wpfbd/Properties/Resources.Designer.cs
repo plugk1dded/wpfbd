@@ -73,9 +73,9 @@ namespace wpfbd.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap No_Image_Available {
+        internal static System.Drawing.Bitmap no_image_available {
             get {
-                object obj = ResourceManager.GetObject("No_Image_Available", resourceCulture);
+                object obj = ResourceManager.GetObject("no_image_available", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

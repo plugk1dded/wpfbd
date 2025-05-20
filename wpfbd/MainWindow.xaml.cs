@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,38 +25,53 @@ namespace wpfbd
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Navigate(new HotelsPage());
+            MainFrame.Navigate(new ToursPage());
             Manager.MainFrame = MainFrame;
 
-            // ImportHotels();
+            // ImportTours();
         }
 
-        private void ImportHotels()
+        private void ImportTours()
         {
-            var filedata = File.ReadAllLines(@"C:\Users\user\Desktop\Отели.txt");
-            var images = Directory.GetFiles(@"C:\Users\user\Desktop\Отели фото");
+            var filedata = File.ReadAllLines(@"C:\Users\user\Desktop\Туры.txt");
+            var images = Directory.GetFiles(@"C:\Users\user\Desktop\photos");
+
+            var countTours = ToursEntities.GetContext().Tour.ToList().Count();
 
             foreach (var line in filedata)
             {
-                var data = line.Split('\t');
-
-                var tempHotel = new Hotel
+                var data = line.Split(' ');
+                var tempTour = new Tour
                 {
                     Name = data[0].Replace("\"", ""),
-                    Country = data[2], // хз че делать
-                    CountOfStars = int.Parse(data[1]),
+                    TicketCount = int.Parse(data[1]),
+                    Price = decimal.Parse(data[2]),
+                    isActual = (data[3] == "0") ? false : true
                 };
-                
+
+                countTours += 1;
+                tempTour.Id = countTours;
+                foreach (var tourType in data[4].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var currentType = ToursEntities.GetContext().Type.ToList().FirstOrDefault(p => p.Name == tourType);
+                    if (currentType != null)
+                    {
+                        tempTour.Type.Add(currentType);
+                    }
+
+                }
+
                 try
                 {
-                    tempHotel.HotelImage = File.ReadAllBytes(images.FirstOrDefault(p => p.Contains(tempHotel.Name))); // тоже хз по идее надо тянуть из другой таблицы изначально в нее записав
+                    tempTour.ImagePreview = File.ReadAllBytes(images.FirstOrDefault(p => p.Contains(tempTour.Name)));
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
 
-                ToursEntities.GetContext().Hotel.Add(tempHotel);
+
+                ToursEntities.GetContext().Tour.Add(tempTour);
                 ToursEntities.GetContext().SaveChanges();
             }
         }

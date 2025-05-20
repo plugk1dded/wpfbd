@@ -21,7 +21,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Выберите тип:" Width="175" TextAlignment="Right"></TextBlock>
-                <ComboBox Width="225" Name="ComboType" SelectionChanged="ComboType_SelectionChanged" DisplayMemberPath="Name"></ComboBox>
+                <ComboBox Name="ComboType" Width="225" SelectionChanged="ComboType_SelectionChanged" DisplayMemberPath="Name"></ComboBox>
             </StackPanel>
             <CheckBox x:Name="CheckActual" Checked="CheckActual_Checked" Unchecked="CheckActual_Checked" Content="Показывать только актуальные туры" HorizontalAlignment="Center"></CheckBox>
         </WrapPanel>
@@ -44,9 +44,7 @@
                         <Image Width="400" Grid.Row="1" Stretch="UniformToFill" HorizontalAlignment="Center" Margin="5">
                             <Image.Source>
                                 <Binding Path="ImagePreview">
-                                    <Binding.TargetNullValue>
-                                        <ImageSource>Resources/No_Image_Available.jpg</ImageSource>
-                                    </Binding.TargetNullValue>
+
                                 </Binding>
                             </Image.Source>
                         </Image>
